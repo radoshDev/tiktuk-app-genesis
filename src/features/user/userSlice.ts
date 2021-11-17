@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { UserAPI } from "./userAPI"
-import { User, UserFeed, UserInfo } from "types/usersTypes"
+import { User, UserInfo } from "types/usersTypes"
+import { Trends } from "types/trendsTypes"
 
 export const authUser = createAsyncThunk("authUser", async () => {
 	const data = await UserAPI.auth()
@@ -8,19 +9,16 @@ export const authUser = createAsyncThunk("authUser", async () => {
 })
 export const loadUserInfo = createAsyncThunk(
 	"loadUserInfo",
-	async (userId?: string) => {
+	async (userId: string) => {
 		const data = await UserAPI.getInfo(userId)
 		return data
 	}
 )
 
-export const loadUserFeed = createAsyncThunk(
-	"loadUserFeed",
-	async (userId: string) => {
-		const data = await UserAPI.getFeed(userId)
-		return data
-	}
-)
+export const loadUserFeed = createAsyncThunk("loadUserFeed", async () => {
+	const data = await UserAPI.getFeed()
+	return data
+})
 
 const initialState = {
 	auth: {
@@ -34,7 +32,7 @@ const initialState = {
 		error: "",
 	},
 	feed: {
-		data: [] as UserFeed,
+		data: [] as Trends,
 		isLoading: true,
 		error: "",
 	},
@@ -58,7 +56,7 @@ const userSlice = createSlice({
 				state.auth.error = ""
 			})
 			.addCase(authUser.rejected, (state, action) => {
-				state.auth.error = "Can't authenticate user. Please retry later"
+				state.auth.error = "Not authorized. Try again"
 				state.auth.isLoading = false
 			})
 			.addCase(loadUserInfo.pending, state => {
@@ -83,10 +81,9 @@ const userSlice = createSlice({
 			})
 			.addCase(
 				loadUserFeed.fulfilled,
-				(state, action: PayloadAction<UserFeed>) => {
+				(state, action: PayloadAction<Trends>) => {
 					state.feed.data = action.payload
 					state.feed.isLoading = false
-					state.feed.error = "Download Videos Failed! Please retry later"
 				}
 			)
 			.addCase(loadUserFeed.rejected, (state, action) => {

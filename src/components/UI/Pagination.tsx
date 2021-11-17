@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo, useState } from "react"
-import styled from "styled-components"
+import styled from "styled-components/macro"
 
 type Props = {
 	activePage: number
@@ -26,9 +26,8 @@ const Pagination: FC<Props> = ({
 
 	useEffect(() => {
 		const endOffset = itemOffset + itemsPerPage
-		// console.log(`Loading items from ${itemOffset} to ${endOffset}`)
 		setCurrentItems(items.slice(itemOffset, endOffset))
-	}, [itemOffset, itemsPerPage])
+	}, [itemOffset, itemsPerPage, items])
 
 	// Invoke when user click to request another page.
 	const handlePageClick = (currentPage: number) => {
@@ -62,15 +61,13 @@ const Pagination: FC<Props> = ({
 				<S.Btn
 					className={activePage === page ? "active" : ""}
 					key={page}
-					onClick={() => handlePageClick(page)}
-				>
+					onClick={() => handlePageClick(page)}>
 					{page}
 				</S.Btn>
 			))}
 			<S.Btn
 				className={activePage === totalPages ? "active" : ""}
-				onClick={handleNext}
-			>
+				onClick={handleNext}>
 				Next
 			</S.Btn>
 		</S.Pagination>

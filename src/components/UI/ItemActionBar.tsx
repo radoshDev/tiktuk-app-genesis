@@ -1,4 +1,3 @@
-import { FC } from "react"
 import { FcLike } from "react-icons/fc"
 import { FaCommentDots } from "react-icons/fa"
 import styled from "styled-components/macro"

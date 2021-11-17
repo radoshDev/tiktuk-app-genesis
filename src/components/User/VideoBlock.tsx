@@ -8,43 +8,37 @@ import { loadUserFeed } from "features/user/userSlice"
 import Rectangle from "components/UI/Rectangle"
 import ErrorText from "components/UI/ErrorText"
 
+const mockArray = Array(12).fill(1)
+
 const VideoPreloader = () => (
 	<>
-		{Array(9)
-			.fill(1)
-			.map((el, i) => (
-				<S.VideoWrapper key={el + i}>
-					<Rectangle width={300} height={300} />
-				</S.VideoWrapper>
-			))}
+		{mockArray.map((el, i) => (
+			<S.VideoWrapper key={el + i}>
+				<Rectangle width={300} height={500} />
+			</S.VideoWrapper>
+		))}
 	</>
 )
 
 const VideoBlock: FC = () => {
 	const dispatch = useDispatch()
 	const { data, isLoading, error } = useAppSelector(s => s.user.feed)
+	const userId = useAppSelector(s => s.user.info.data?.user?.uniqueId)
 	const { id } = useParams()
 
 	useEffect(() => {
-		if (data.length === 0 && id) {
-			dispatch(loadUserFeed(id))
+		if (id !== userId) {
+			dispatch(loadUserFeed())
 		}
-	}, [id])
+	}, [id, dispatch, userId])
+	if (error) return <ErrorText>{error}</ErrorText>
 	return (
 		<S.VideoGrid>
 			{isLoading ? (
 				<VideoPreloader />
 			) : (
-				data?.map?.((item, i) => (
-					<VideoItem
-						isMock={i === 0}
-						playCount={item.stats.playCount}
-						video={item.video}
-						key={item.id}
-					/>
-				))
+				data?.map?.(item => <VideoItem videoInfo={item} key={item.id} />)
 			)}
-			{error && <ErrorText>{error}</ErrorText>}
 		</S.VideoGrid>
 	)
 }

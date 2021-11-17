@@ -153,9 +153,3 @@ export type UserInfo = {
 	user: User
 }
 export type UserFeed = Array<Feed>
-export type KilledResponse = {
-	cmd: string
-	code: number
-	killed: boolean
-	signal: any
-}

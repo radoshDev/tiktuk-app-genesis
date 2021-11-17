@@ -1,7 +1,5 @@
 import TrendVideo from "components/Trends/TrendVideo"
 import ItemActionBar from "components/UI/ItemActionBar"
-import Video from "components/UI/Video"
-import { useState } from "react"
 import styled from "styled-components/macro"
 
 type Props = {

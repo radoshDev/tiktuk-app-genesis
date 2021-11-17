@@ -39,10 +39,11 @@ const Info: FC<Props> = ({ loading, data }) => {
 
 const S = {
 	Info: styled.div`
-		display: flex;
+		display: grid;
+		grid-template-columns: minmax(100px, 150px) 1fr;
+		column-gap: 1.5rem;
 		margin-top: 2rem;
 		.icon {
-			margin-right: 1.5rem;
 			width: 150px;
 			height: 150px;
 			border-radius: 50%;

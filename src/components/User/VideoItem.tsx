@@ -1,27 +1,39 @@
 import { FC, useState } from "react"
 import styled from "styled-components/macro"
-import { Video } from "types/usersTypes"
 import { kFormatter } from "utils/kFormatter"
 import VideoElement from "components/UI/Video"
+import { TrendItem } from "types/trendsTypes"
+import Modal from "components/UI/Modal"
 
 type Props = {
-	playCount: number
-	video: Video
-	isMock?: boolean
+	videoInfo: TrendItem
 }
+const VideoItem: FC<Props> = ({ videoInfo }) => {
+	const [isVideoShow, setIsVideoShow] = useState(false)
+	const [isModal, setIsModal] = useState(false)
 
-const VideoItem: FC<Props> = ({ playCount, video, isMock }) => {
-	const [onHover, setOnHover] = useState(false)
+	const handleOpenModal = () => {
+		setIsModal(true)
+	}
 	return (
-		<S.Card
-			onMouseEnter={() => setOnHover(true)}
-			onMouseLeave={() => setOnHover(false)}
-		>
-			<S.Title>{kFormatter(playCount)} View</S.Title>
-			<S.VideoWrapper imgUrl={video.cover}>
-				{isMock && onHover && <VideoElement />}
-			</S.VideoWrapper>
-		</S.Card>
+		<>
+			<S.Card
+				onClick={() => {
+					handleOpenModal()
+				}}
+				onMouseEnter={() => setIsVideoShow(true)}
+				onMouseLeave={() => setIsVideoShow(false)}>
+				<S.Title>{kFormatter(videoInfo.playCount)} views</S.Title>
+				<S.VideoWrapper imgUrl={videoInfo.covers.default}>
+					{isVideoShow && <VideoElement videoUrl={videoInfo.videoUrl} />}
+				</S.VideoWrapper>
+			</S.Card>
+			{isModal && (
+				<Modal setIsModal={setIsModal}>
+					<VideoElement videoUrl={videoInfo.videoUrl} />
+				</Modal>
+			)}
+		</>
 	)
 }
 
@@ -48,8 +60,9 @@ const S = {
 		left: 0;
 		width: 100%;
 	`,
-	VideoWrapper: styled.div<{ imgUrl: string }>`
+	VideoWrapper: styled.div<{ imgUrl?: string }>`
 		background-image: url(${p => p.imgUrl || ""});
+		background-color: lightgray;
 		background-size: cover;
 		background-position: center;
 		width: 100%;

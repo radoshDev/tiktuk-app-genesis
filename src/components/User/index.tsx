@@ -5,27 +5,28 @@ import { useAppSelector } from "app/hooks"
 import Divider from "components/UI/Divider"
 import UserVideoBlock from "components/User/VideoBlock"
 import { useEffect } from "react"
-import { loadUserFeed, loadUserInfo } from "features/user/userSlice"
+import { loadUserInfo } from "features/user/userSlice"
 import { useParams } from "react-router-dom"
 import Info from "./Info"
 import StatsInfo from "./StatsInfo"
+import ErrorText from "components/UI/ErrorText"
 
 const UserPage = () => {
 	const dispatch = useDispatch()
 	const {
 		data: infoData,
 		isLoading: infoLoading,
-		error: infoError,
+		error,
 	} = useAppSelector(s => s.user.info)
 	const { id } = useParams()
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
-		if (id !== infoData?.user?.uniqueId) {
+		if (id && id !== infoData?.user?.uniqueId) {
 			dispatch(loadUserInfo(id))
 		}
-	}, [id])
-
+	}, [id, dispatch])
+	if (error) return <ErrorText>{error}</ErrorText>
 	return (
 		<>
 			<Info loading={infoLoading} data={infoData.user} />

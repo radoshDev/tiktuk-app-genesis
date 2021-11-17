@@ -31,7 +31,7 @@ const trendsSlice = createSlice({
 				state.error = ""
 			})
 			.addCase(loadTrends.rejected, (state, action) => {
-				state.error = action.error.message as string
+				state.error = "Download Videos Failed! Please retry later"
 				state.isLoading = false
 			})
 	},

@@ -2,7 +2,6 @@ import { useState, useRef } from "react"
 import styled from "styled-components/macro"
 import { FiPause, FiPlay } from "react-icons/fi"
 import { RiVolumeDownFill, RiVolumeMuteFill } from "react-icons/ri"
-const vPath = require("../../assets/first.mp4")
 
 type Props = {
 	videoUrl?: string
@@ -14,7 +13,6 @@ const Video = ({ videoUrl }: Props) => {
 	const [isMuted, setIsMuted] = useState(true)
 
 	const videoRef = useRef<HTMLVideoElement | null>(null)
-
 	const handlePlay = () => {
 		if (!videoRef.current) return
 		if (isPlaying) {
@@ -28,7 +26,6 @@ const Video = ({ videoUrl }: Props) => {
 	const handleLoaded = async (e: any) => {
 		await e.target.play()
 		setIsPlaying(true)
-
 		setIsLoading(false)
 	}
 	const handleMute = () => {
@@ -54,10 +51,10 @@ const Video = ({ videoUrl }: Props) => {
 		onClick: handleMute,
 	}
 	return (
-		<S.VideoBlock isLoading={isLoading}>
+		<S.VideoContainer isLoading={isLoading}>
 			<video
 				ref={videoRef}
-				src={videoUrl || vPath.default}
+				src={videoUrl}
 				onLoadedData={handleLoaded}
 				muted
 				loop
@@ -70,15 +67,16 @@ const Video = ({ videoUrl }: Props) => {
 					<RiVolumeDownFill {...iconMute} />
 				)}
 			</div>
-		</S.VideoBlock>
+		</S.VideoContainer>
 	)
 }
 
 const S = {
-	VideoBlock: styled.div<{ isLoading: boolean }>`
+	VideoContainer: styled.div<{ isLoading: boolean }>`
 		position: relative;
 		height: 100%;
 		opacity: ${p => (p.isLoading ? "0" : "1")};
+		display: flex;
 		video {
 			object-fit: cover;
 			object-position: center;

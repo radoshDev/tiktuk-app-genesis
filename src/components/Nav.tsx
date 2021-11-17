@@ -1,19 +1,20 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components/macro"
-import { Container } from "styles/Common"
+import { Container } from "styles/CommonStyles"
 import { FaBolt } from "react-icons/fa"
 import { MdAccountCircle } from "react-icons/md"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { authUser } from "features/user/userSlice"
 import { useAppSelector } from "app/hooks"
+import ErrorText from "components/UI/ErrorText"
 
 const Nav = () => {
 	const dispatch = useDispatch()
 	const { data: userAuth, isLoading, error } = useAppSelector(s => s.user.auth)
 	useEffect(() => {
 		dispatch(authUser())
-	}, [])
+	}, [dispatch])
 	return (
 		<>
 			<S.Menu>
@@ -23,7 +24,7 @@ const Nav = () => {
 							<FaBolt />
 							TikTuk
 						</S.Logo>
-						{isLoading ? (
+						{isLoading || error ? (
 							<MdAccountCircle size={40} />
 						) : (
 							<Link to={`/account/${userAuth.uniqueId}`}>
@@ -32,6 +33,7 @@ const Nav = () => {
 								</div>
 							</Link>
 						)}
+						{error && <ErrorText>{error}</ErrorText>}
 					</S.InnerMenu>
 				</Container>
 			</S.Menu>

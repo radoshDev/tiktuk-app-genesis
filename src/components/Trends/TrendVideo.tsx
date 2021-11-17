@@ -63,10 +63,7 @@ const TrendVideo = ({ videoUrl }: Props) => {
 			<video
 				ref={videoRef}
 				src={videoUrl}
-				onLoadedData={() => {
-					console.log("Finished load video")
-					setIsLoading(false)
-				}}
+				onLoadedData={() => setIsLoading(false)}
 				muted={isMuted}
 				loop
 			/>
